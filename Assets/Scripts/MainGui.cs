@@ -168,9 +168,11 @@ public class MainGui : MonoBehaviour {
 	public PropChannelMap propRed = PropChannelMap.None;
 	public PropChannelMap propGreen = PropChannelMap.None;
 	public PropChannelMap propBlue = PropChannelMap.None;
+	public PropChannelMap propAlpha = PropChannelMap.None;
 	bool propRedChoose = false;
 	bool propGreenChoose = false;
 	bool propBlueChoose = false;
+	bool propAlphaChoose = false;
 
 	private ClipboardImageHelper.ClipboardImage CIH;
 
@@ -1116,6 +1118,7 @@ public class MainGui : MonoBehaviour {
 			propRedChoose = true;
 			propGreenChoose = false;
 			propBlueChoose = false;
+			propAlphaChoose = false;
 		}
 
 		if (propGreenChoose) { GUI.enabled = false; } else { GUI.enabled = true; }
@@ -1124,6 +1127,7 @@ public class MainGui : MonoBehaviour {
 			propRedChoose = false;
 			propGreenChoose = true;
 			propBlueChoose = false;
+			propAlphaChoose = false;
 		}
 
 		if (propBlueChoose) { GUI.enabled = false; } else { GUI.enabled = true; }
@@ -1132,13 +1136,23 @@ public class MainGui : MonoBehaviour {
 			propRedChoose = false;
 			propGreenChoose = false;
 			propBlueChoose = true;
+			propAlphaChoose = false;
+		}
+
+		if (propAlphaChoose) { GUI.enabled = false; } else { GUI.enabled = true; }
+		GUI.Label(new Rect (offsetX + 100, offsetY + 150, 20, 20), "A:" );
+		if (GUI.Button ( new Rect (offsetX + 120, offsetY + 150, 100, 25), PCM2String( propAlpha, "Alpha None" ) ) ) {
+			propRedChoose = false;
+			propGreenChoose = false;
+			propBlueChoose = false;
+			propAlphaChoose = true;
 		}
 
 		GUI.enabled = true;
 
 		int propBoxOffsetX = offsetX + 250;
 		int propBoxOffsetY = 20;
-		if (propRedChoose || propGreenChoose || propBlueChoose) {
+		if (propRedChoose || propGreenChoose || propBlueChoose || propAlphaChoose) {
 			GUI.Box( new Rect (propBoxOffsetX, propBoxOffsetY, 150, 245), "Map for Channel" );
 			bool chosen = false;
 			PropChannelMap chosenPCM = PropChannelMap.None;
@@ -1182,13 +1196,17 @@ public class MainGui : MonoBehaviour {
 				if( propBlueChoose ){
 					propBlue = chosenPCM;
 				}
+				if ( propAlphaChoose ){
+					propAlpha = chosenPCM;
+				}
 				propRedChoose = false;
 				propGreenChoose = false;
 				propBlueChoose = false;
+				propAlphaChoose = false;
 			}
 		}
 
-		if (GUI.Button (new Rect(offsetX + 120, offsetY + 150, 100, 40), "Save\r\nProperty Map")) {
+		if (GUI.Button (new Rect(offsetX + 120, offsetY + 185, 100, 40), "Save\r\nProperty Map")) {
 			ProcessPropertyMap();
 			textureToSave = _PropertyMap;
 			mapType = "_msao";
@@ -1197,7 +1215,7 @@ public class MainGui : MonoBehaviour {
 		}
 
 		if( QuicksavePathProperty == "" ){ GUI.enabled = false; }
-		if (GUI.Button (new Rect(offsetX + 120, offsetY + 200, 100, 40), "Quick Save\r\nProperty Map")) {
+		if (GUI.Button (new Rect(offsetX + 120, offsetY + 235, 100, 40), "Quick Save\r\nProperty Map")) {
 			ProcessPropertyMap();
 			textureToSave = _PropertyMap;
 			mapType = "_msao";
@@ -1623,11 +1641,56 @@ public class MainGui : MonoBehaviour {
 
 	}
 
+	// Alpha can't be done with the blit shader so we'll do it separately.
+	void GetPropertyInfo(PropChannelMap pcm, out Texture2D propertyMap, out Texture2D overlayTexture)
+	{
+		switch (pcm) {
+			case PropChannelMap.Height:
+				//SetPropertyTexture (texPrefix, _HeightMap, _TextureGrey);
+				propertyMap = _HeightMap;
+				overlayTexture = _TextureGrey;
+				break;
+			case PropChannelMap.Metallic:
+				// SetPropertyTexture (texPrefix, _MetallicMap, _TextureGrey);
+				propertyMap = _MetallicMap;
+				overlayTexture = _TextureGrey;
+				break;
+			case PropChannelMap.Smoothness:
+				// SetPropertyTexture (texPrefix, _SmoothnessMap, _TextureGrey);
+				propertyMap = _SmoothnessMap;
+				overlayTexture = _TextureGrey;
+				break;
+			case PropChannelMap.Edge:
+				// SetPropertyTexture (texPrefix, _EdgeMap, _TextureGrey);
+				propertyMap = _EdgeMap;
+				overlayTexture = _TextureGrey;
+				break;
+			case PropChannelMap.Ao:
+				// SetPropertyTexture (texPrefix, _AOMap, _TextureGrey);
+				propertyMap = _AOMap;
+				overlayTexture = _TextureGrey;
+				break;
+			case PropChannelMap.AoEdge:
+				// SetPropertyTexture (texPrefix, _AOMap, _EdgeMap);
+				propertyMap = _AOMap;
+				overlayTexture = _EdgeMap;
+				break;
+			case PropChannelMap.None:
+			default:
+				// SetPropertyTexture (texPrefix, _TextureBlack, _TextureGrey);
+				propertyMap = _TextureBlack;
+				overlayTexture = _TextureGrey;
+				break;
+		}
+	}
+
 	public void ProcessPropertyMap () {
 
 		SetPropertyMapChannel ("_Red", propRed);
 		SetPropertyMapChannel ("_Green", propGreen);
 		SetPropertyMapChannel ("_Blue", propBlue);
+		SetPropertyMapChannel ("_Alpha", propAlpha);
+		// GetPropertyInfo(propAlpha, out Texture2D alphaMap, out Texture2D alphaOverlay);
 
 		Vector2 size = GetSize ();
 		RenderTexture _TempMap = RenderTexture.GetTemporary ((int)size.x, (int)size.y, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Default);
@@ -1639,7 +1702,7 @@ public class MainGui : MonoBehaviour {
 			_PropertyMap = null;
 		}
 
-		_PropertyMap = new Texture2D (_TempMap.width, _TempMap.height, TextureFormat.RGB24, false);
+		_PropertyMap = new Texture2D (_TempMap.width, _TempMap.height, TextureFormat.ARGB32, false);
 		_PropertyMap.ReadPixels (new Rect (0, 0, _TempMap.width, _TempMap.height), 0, 0);
 		_PropertyMap.Apply ();
 

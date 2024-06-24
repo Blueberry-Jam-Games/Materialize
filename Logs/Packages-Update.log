@@ -51,3 +51,23 @@ The following packages were added:
   com.unity.ugui@1.0.0
   com.unity.xr.legacyinputhelpers@2.1.10
   com.unity.ai.navigation@1.1.4
+
+=== Tue Dec 12 18:57:59 2023
+
+Packages were changed.
+Update Mode: updateDependencies
+
+The following packages were updated:
+  com.unity.ai.navigation from version 1.1.4 to 1.1.5
+  com.unity.collab-proxy from version 2.0.5 to 2.2.0
+  com.unity.ide.rider from version 3.0.24 to 3.0.26
+  com.unity.ide.visualstudio from version 2.0.18 to 2.0.22
+  com.unity.timeline from version 1.7.5 to 1.7.6
+
+=== Mon Apr 22 00:34:17 2024
+
+Packages were changed.
+Update Mode: updateDependencies
+
+The following packages were updated:
+  com.unity.ide.rider from version 3.0.26 to 3.0.27
