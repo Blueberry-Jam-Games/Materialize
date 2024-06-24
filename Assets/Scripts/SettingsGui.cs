@@ -87,11 +87,11 @@ public class SettingsGui : MonoBehaviour {
 			settings.normalMapMaxStyle = true;
 			settings.normalMapMayaStyle = false;
 			settings.postProcessEnabled = true;
-			settings.propRed = PropChannelMap.None;
-			settings.propGreen = PropChannelMap.None;
-			settings.propBlue = PropChannelMap.None;
-			settings.propAlpha = PropChannelMap.None;
-			settings.fileFormat = FileFormat.bmp;
+			settings.propRed = PropChannelMap.Metallic;
+			settings.propGreen = PropChannelMap.Ao;
+			settings.propBlue = PropChannelMap.Height;
+			settings.propAlpha = PropChannelMap.Smoothness;
+			settings.fileFormat = FileFormat.png;
 			SaveSettings();
 		}
 

@@ -134,8 +134,8 @@ public class MainGui : MonoBehaviour {
 
 	bool busySaving = false;
 
-	public FileFormat selectedFormat = FileFormat.tga;
-	bool bmpSelected = true;
+	public FileFormat selectedFormat = FileFormat.png;
+	bool bmpSelected = false;
 	bool jpgSelected = false;
 	bool pngSelected = true;
 	bool tgaSelected = false;
@@ -462,9 +462,9 @@ public class MainGui : MonoBehaviour {
 		}
 		GUI.enabled = true;
 
-		if (GUI.Button (new Rect(Screen.width - 260, 10, 140, 30), "Make Suggestion")) {
-			SuggestionGuiObject.SetActive(true);
-		}
+		// if (GUI.Button (new Rect(Screen.width - 260, 10, 140, 30), "Make Suggestion")) {
+		// 	SuggestionGuiObject.SetActive(true);
+		// }
 
 		if( hideGui == false ){
 			if (GUI.Button (new Rect(Screen.width - 110, 10, 100, 30), "Hide Gui")) {
@@ -1058,7 +1058,7 @@ public class MainGui : MonoBehaviour {
 
 		offsetX = offsetX + spacingX * 7;
 
-		GUI.Box( new Rect (offsetX, offsetY, 230, 250), "Saving Options" );
+		GUI.Box( new Rect (offsetX, offsetY, 230, 285), "Saving Options" );
 
 		GUI.Label (new Rect (offsetX + 20, offsetY + 20, 100, 25), "File Format");
 

@@ -3,8 +3,9 @@
   <normalMapMaxStyle>true</normalMapMaxStyle>
   <normalMapMayaStyle>false</normalMapMayaStyle>
   <postProcessEnabled>true</postProcessEnabled>
-  <propRed>None</propRed>
-  <propGreen>None</propGreen>
-  <propBlue>None</propBlue>
-  <fileFormat>bmp</fileFormat>
+  <propRed>Metallic</propRed>
+  <propGreen>Ao</propGreen>
+  <propBlue>Height</propBlue>
+  <propAlpha>Smoothness</propAlpha>
+  <fileFormat>png</fileFormat>
 </Settings>
