@@ -425,14 +425,6 @@ public class MainGui : MonoBehaviour {
 		MaterialGuiScript.Initialize();
 	}
 
-	void Fullscreen() {
-		if (Screen.fullScreen) {
-			Screen.fullScreen = false;
-		} else {
-			Screen.fullScreen = true;
-		}
-	}
-
 	void SetFileMaskImage() {
 		fileBrowser.fileMasks = "*.png;*.jpg;*.jpeg;*.tga;*.bmp;*.tif";
 	}
@@ -450,17 +442,15 @@ public class MainGui : MonoBehaviour {
 			Application.Quit();
 		}
 
-		GUI.enabled = false;
-		if (Screen.fullScreen) {
+		if (Screen.fullScreenMode == FullScreenMode.Windowed) {
 			if (GUI.Button (new Rect (Screen.width - 190, Screen.height - 40, 100, 30), "Windowed")) {
-				Fullscreen();
+				Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
 			}
 		} else {
 			if (GUI.Button (new Rect (Screen.width - 190, Screen.height - 40, 100, 30), "Full Screen")) {
-				Fullscreen();
+				Screen.fullScreenMode = FullScreenMode.Windowed;
 			}
 		}
-		GUI.enabled = true;
 
 		// if (GUI.Button (new Rect(Screen.width - 260, 10, 140, 30), "Make Suggestion")) {
 		// 	SuggestionGuiObject.SetActive(true);
